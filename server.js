@@ -72,7 +72,7 @@ app.get("/articles", function (req, res) {
 
 //route to capture article by id and show related comments
 app.get("/articles/:id", function (req, res) {
-    db.Article.findOne({ _id: req.params.id }).populate("comment").then(function (articleComment) {
+    db.Article.findOne({ _id: req.params.id }).populate("Comment").then(function (articleComment) {
         res.json(articleComment);
     }).catch(function (error) {
         res.json(error)
@@ -80,7 +80,7 @@ app.get("/articles/:id", function (req, res) {
 });
 
 //post route to save an article's comment or add to existing
-app.post("articles/:id", function (req, res) {
+app.post("/articles/:id", function (req, res) {
     db.Comment.create(req.body).then(function (newComment) {
         return db.Article.findOneAndUpdate({ _id: req.params.id }, { comment: newComment._id }, { new: true });
     }).then(function (updatedArticle) {
