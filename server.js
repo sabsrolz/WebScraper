@@ -28,11 +28,6 @@ app.use(express.static("public"));
 //name of db is webScraper
 mongoose.connect("mongodb://localhost/webScraper", { userNewUrlParser: true });
 
-// Start the server
-app.listen(PORT, function () {
-    console.log("App running on port " + PORT + "!");
-});
-
 //Routing
 //GET route to scrape website
 
@@ -53,8 +48,49 @@ app.get("/scraped", function (req, res) {
             result.summary = $(this).children("a").children("span").children("em").text();
 
             console.log(result)
+
+            //create new article in db
+            db.Article.create(result).then(function (addedArticle) {
+                console.log(addedArticle)
+            }).catch(function (error) {
+                console.log(error)
+            })
         })
 
-
+        res.send("scraped!")
     })
 })
+
+//route to get all articles from db
+app.get("/articles", function (req, res) {
+    db.Article.find({}).then(function (database) {
+        res.json(database)
+    }).catch(function (error) {
+        res.json(error)
+    })
+})
+
+//route to capture article by id and show related comments
+app.get("/articles/:id", function (req, res) {
+    db.Article.findOne({ _id: req.params.id }).populate("comment").then(function (articleComment) {
+        res.json(articleComment);
+    }).catch(function (error) {
+        res.json(error)
+    });
+});
+
+//post route to save an article's comment or add to existing
+app.post("articles/:id", function (req, res) {
+    db.Comment.create(req.body).then(function (newComment) {
+        return db.Article.findOneAndUpdate({ _id: req.params.id }, { comment: newComment._id }, { new: true });
+    }).then(function (updatedArticle) {
+        res.json(updatedArticle)
+    }).catch(function (error) {
+        res.json(error)
+    })
+})
+
+// Start the server
+app.listen(PORT, function () {
+    console.log("App running on port " + PORT + "!");
+});
