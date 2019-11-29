@@ -2,7 +2,7 @@ let express = require("express");
 let logger = require("morgan");
 let mongoose = require("mongoose");
 let exphbs = require("express-handlebars");
-
+let existingComments = [];
 //scraping tools
 let axios = require("axios");
 let cheerio = require("cheerio");
@@ -41,6 +41,11 @@ app.get("/scraped", function(req, res) {
     let $ = cheerio.load(response.data);
     //console.log(data)
     //res.json(data)
+    // let existingArticles = [];
+    // db.Article.find({}).then(function(database) {
+    //   database.forEach(element => existingArticles.push(element.title));
+    //   console.log(existingArticles);
+
     let count = 0;
     let result = {};
     $("li").each(function(i, element) {
@@ -65,15 +70,12 @@ app.get("/scraped", function(req, res) {
 
       //console.log(result);
       //check if article is already in db
-      //   let existingArticles = [];
-      //   //   db.Article.find({}).then(function(database) {
-      //   //     database.forEach(article => existingArticles.push(article));
-      //   //     console.log(existingArticles);
-      //   //   });
+
       //create new article in db
+
       db.Article.create(result)
         .then(function(addedArticle) {
-          console.log(addedArticle);
+          //console.log(addedArticle);
         })
         .catch(function(error) {
           console.log(error);
@@ -83,6 +85,7 @@ app.get("/scraped", function(req, res) {
       count: count
     });
     //res.send("scraped!");
+    // });
   });
 });
 
@@ -110,21 +113,23 @@ app.get("/articles/:id", function(req, res) {
 });
 
 //post route to save an article's comment or add to existing
-//let commentIds = [];
+
 app.post("/articles/:id", function(req, res) {
   //console.log(req.body);
   db.Comment.create(req.body)
     .then(function(newComment) {
-      //commentIds.push(newComment);
-
+      existingComments.push(newComment._id);
+      //console.log(existingComments);
       //return
       db.Article.findOneAndUpdate(
         { _id: req.params.id },
-        { $push: { comment: newComment._id } },
+        // { $push: { comment: newComment._id } },
+        { commentList: existingComments },
         { new: true }
       );
     })
     .then(function(updatedArticle) {
+      //console.log(existingComments);
       res.json(updatedArticle);
     })
     .catch(function(error) {

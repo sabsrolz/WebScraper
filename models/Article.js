@@ -8,7 +8,8 @@ let Schema = mongoose.Schema;
 let ArticleSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   summary: {
     type: String,
@@ -21,7 +22,8 @@ let ArticleSchema = new Schema({
   comment: {
     type: [Schema.Types.ObjectId],
     ref: "Comment"
-  }
+  },
+  commentList: [String]
   //   comment: [String]
 });
 

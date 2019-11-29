@@ -9,6 +9,18 @@ $.getJSON("/articles", function(res) {
   }
 });
 
+$("#refresh-scrape").on("click", function() {
+  $.ajax({
+    method: "GET",
+    url: "/scraped"
+  }).then(function(res) {
+    setTimeout(function() {
+      // wait for 5 secs(2)
+      location.reload(); // then reload the page.(3)
+    }, 1000);
+    console.log("scrape completed");
+  });
+});
 //to display comments
 $(document).on("click", "p", function() {
   $("#comments-section").empty();
