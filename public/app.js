@@ -1,71 +1,76 @@
 //articles-section
 //comments-section
 
-$.getJSON("/articles", function (res) {
-
-    for (let art = 0; art < res.length; art++) {
-
-        $("#articles-section").append(
-            `<p class = "article-clicked" data-id = ${res[art]._id}>${res[art].title}</br><a href = ${res[art].link}>${res[art].link}</a ></br > ${res[art].summary}</p > `
-        )
-    }
+$.getJSON("/articles", function(res) {
+  for (let art = 0; art < res.length; art++) {
+    $("#articles-section").append(
+      `<p class = "article-clicked" data-id = ${res[art]._id}>Title: ${res[art].title}</br><a href = ${res[art].link}>Link: ${res[art].link}</a ></br >Summary: ${res[art].summary}</p > `
+    );
+  }
 });
 
 //to display comments
-$(document).on("click", "p", function () {
-    $("#comments-section").empty();
+$(document).on("click", "p", function() {
+  $("#comments-section").empty();
 
-    let idSelected = $(this).attr("data-id");
+  let idSelected = $(this).attr("data-id");
 
-    $.ajax({
-        method: "GET",
-        url: "/articles/" + idSelected
-    }).then(function (res) {
-        $("#comments-section").append("<h2>" + res.title + "</h2>");
-        // An input to enter a new title
-        $("#comments-section").append("<input id='titleinput' name='title' >");
-        // A textarea to add a new note body
-        $("#comments-section").append("<textarea id='bodyinput' name='body'></textarea>");
-        // A button to submit a new note, with the id of the article saved to it
-        $("#comments-section").append("<button data-id=" + res._id + " id='savecomment'>Save Comment</button>");
+  $.ajax({
+    method: "GET",
+    url: "/articles/" + idSelected
+  }).then(function(res) {
+    $("#comments-section").append(
+      "<h5>" + "Article selected: " + res.title + "</h5>"
+    );
+    // An input to enter a new title
+    $("#comments-section").append(
+      "<input id='titleinput' name='title' class = 'col-md-2' >"
+    );
+    // A textarea to add a new note body
+    $("#comments-section").append(
+      "<input id='bodyinput' name='body' class = 'col-md-4'>"
+    );
+    // A button to submit a new note, with the id of the article saved to it
+    $("#comments-section").append(
+      "<button data-id='" + res._id + "' id='savecomment'>Save Comment</button>"
+    );
 
-        // If there's a note in the article
-        if (res.comment) {
-            // Place the title of the note in the title input
-            $("#titleinput").val(res.comment.title);
-            // Place the body of the note in the body textarea
-            $("#bodyinput").val(res.comment.body);
-        }
-    })
-})
+    // If there's a note in the article
+    if (res.comment) {
+      // Place the title of the note in the title input
+      $("#titleinput").val(res.comment.title);
+      // Place the body of the note in the body textarea
+      $("#bodyinput").val(res.comment.body);
+    }
+  });
+});
 
 // When you click the savenote button
-$(document).on("click", "#savecomment", function () {
-    // Grab the id associated with the article from the submit button
-    let idSelected = $(this).attr("data-id");
-    console.log(idSelected);
-    // Run a POST request to change the note, using what's entered in the inputs
-    console.log($("#titleinput").val())
-    console.log($("#bodyinput").val())
-    $.ajax({
-        method: "POST",
-        url: "/articles/" + idSelected,
-        data: {
-            // Value taken from title input
-            title: $("#titleinput").val(),
-            // Value taken from note textarea
-            body: $("#bodyinput").val()
-        }
-    })
-        // With that done
-        .then(function (res) {
-            // Log the response
-            console.log(res);
-            // Empty the notes section
-            $("#comments-section").empty();
-        });
+$(document).on("click", "#savecomment", function() {
+  // Grab the id associated with the article from the submit button
+  let idSelected = $(this).attr("data-id");
+  console.log(idSelected);
+  // Run a POST request to change the comment, using what's entered in the inputs
+  console.log($("#titleinput").val());
+  console.log($("#bodyinput").val());
+  $.ajax({
+    method: "POST",
+    url: "/articles/" + idSelected,
+    data: {
+      // Value taken from title input
+      title: $("#titleinput").val(),
+      // Value taken from note textarea
+      body: $("#bodyinput").val()
+    }
+  })
+    // With that done
+    .then(function(res) {
+      // Log the response
+      // Empty the notes section
+      $("#comments-section").empty();
+    });
 
-    // Also, remove the values entered in the input and textarea for note entry
-    $("#titleinput").val("");
-    $("#bodyinput").val("");
+  // Also, remove the values entered in the input and textarea for comment entry
+  $("#titleinput").val("");
+  $("#bodyinput").val("");
 });
