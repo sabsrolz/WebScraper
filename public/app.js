@@ -4,7 +4,7 @@
 $.getJSON("/articles", function(res) {
   for (let art = 0; art < res.length; art++) {
     $("#articles-section").append(
-      `<p class = "article-clicked" data-id = ${res[art]._id}>Title: ${res[art].title}</br><a href = ${res[art].link}>Link: ${res[art].link}</a ></br >Summary: ${res[art].summary}</p > `
+      `<p class = "article-clicked" data-id = ${res[art]._id}>Title: ${res[art].title}</br><a href = ${res[art].link} target="_blank">Link: ${res[art].link}</a ><div class = "small">Summary: ${res[art].summary}</div></br></p>`
     );
   }
 });
