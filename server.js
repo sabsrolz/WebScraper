@@ -118,13 +118,12 @@ app.post("/articles/:id", function(req, res) {
   //console.log(req.body);
   db.Comment.create(req.body)
     .then(function(newComment) {
-      existingComments.push(newComment._id);
+      //existingComments.push(newComment._id);
       //console.log(existingComments);
-      //return
-      db.Article.findOneAndUpdate(
+
+      return db.Article.findOneAndUpdate(
         { _id: req.params.id },
-        // { $push: { comment: newComment._id } },
-        { commentList: existingComments },
+        { $push: { comment: newComment._id } },
         { new: true }
       );
     })
