@@ -29,7 +29,9 @@ app.use(express.static("public"));
 
 //connect to Mongo DB
 //name of db is webScraper
-mongoose.connect("mongodb://localhost:27017/webScraper", {
+let MONGODB_URI =
+  process.env.MONGODB_URI || "mongodb://localhost:27017/webScraper";
+mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true
 });
 
