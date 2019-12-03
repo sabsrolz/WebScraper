@@ -63,8 +63,6 @@ $(document).on("click", "#savecomment", function() {
   let idSelected = $(this).attr("data-id");
   console.log(idSelected);
   // Run a POST request to change the comment, using what's entered in the inputs
-  console.log($("#titleinput").val());
-  console.log($("#bodyinput").val());
   $.ajax({
     method: "POST",
     url: "/articles/" + idSelected,

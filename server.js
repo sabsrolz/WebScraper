@@ -8,7 +8,7 @@ let axios = require("axios");
 let cheerio = require("cheerio");
 
 //require db models
-let db = require("./models/index");
+let db = require("./models");
 
 let PORT = 3000;
 
@@ -117,12 +117,9 @@ app.get("/articles/:id", function(req, res) {
 //post route to save an article's comment or add to existing
 
 app.post("/articles/:id", function(req, res) {
-  //console.log(req.body);
   db.Comment.create(req.body)
     .then(function(newComment) {
-      //existingComments.push(newComment._id);
-      //console.log(existingComments);
-
+      console.log(req.params);
       return db.Article.findOneAndUpdate(
         { _id: req.params.id },
         { $push: { comment: newComment._id } },
@@ -130,7 +127,7 @@ app.post("/articles/:id", function(req, res) {
       );
     })
     .then(function(updatedArticle) {
-      //console.log(existingComments);
+      console.log(updatedArticle);
       res.json(updatedArticle);
     })
     .catch(function(error) {
