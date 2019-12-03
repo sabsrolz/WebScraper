@@ -19,10 +19,12 @@ let ArticleSchema = new Schema({
     type: String,
     required: true
   },
-  comment: {
-    type: Array,
-    ref: "Comment"
-  }
+  comment: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Comment"
+    }
+  ]
 
   //   comment: [String]
 });

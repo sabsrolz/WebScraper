@@ -123,8 +123,17 @@ app.post("/articles/:id", function(req, res) {
       return db.Article.findOneAndUpdate(
         { _id: req.params.id },
         { $push: { comment: newComment._id } },
-        { new: true }
+        { new: true },
+        { useFindAndModify: false }
       );
+      // db.Article.update(
+      //   { _id: req.params.id },
+      //   { $push: { comment: newComment._id } },
+      //   { new: true }
+      // ),
+      //   then(function(test) {
+      //     console.log(test);
+      //   });
     })
     .then(function(updatedArticle) {
       console.log(updatedArticle);
