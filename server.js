@@ -31,8 +31,7 @@ app.use(express.static("public"));
 //connect to Mongo DB
 //name of db is webScraper
 let MONGODB_URI =
-  "mongodb://sabsrolz@umich:Coqui123@ds017248.mlab.com:17248/heroku_dpjcfv0b" ||
-  "mongodb://localhost:27017/webScraper";
+  process.env.MONGODB_URI || "mongodb://localhost:27017/webScraper";
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true
 });
