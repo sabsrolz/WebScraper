@@ -124,16 +124,16 @@ app.get("/articles/:id", function(req, res) {
 
 //post route to save an article's comment or add to existing
 
-app.post("/articles/:id", function(req, res) {
+app.post("/real-articles/:id", function(req, res) {
   db.Comment.create(req.body)
     .then(function(newComment) {
       console.log(req.params);
-      return db.Article.findOneAndUpdate(
-        { _id: req.params.id },
-        { $push: { comment: newComment._id } },
-        { new: true },
-        { useFindAndModify: false }
-      );
+      // return db.Article.findOneAndUpdate(
+      //   { _id: req.params.id },
+      //   { $push: { comment: "test" } },
+      //   { new: true },
+      //   { useFindAndModify: false }
+      // );
       // db.Article.update(
       //   { _id: req.params.id },
       //   { $push: { comment: newComment._id } },
@@ -150,6 +150,27 @@ app.post("/articles/:id", function(req, res) {
     .catch(function(error) {
       res.json(error);
     });
+});
+
+app.post("/articles/:id", function(req, res) {
+  db.Comment.create(req.body)
+    .then(function(doc) {
+      console.log("Document created:", doc);
+    })
+    .catch(function(error) {
+      console.log("ERROR could not create document");
+      res.json(error);
+    });
+
+  db.Article.findOneAndUpdate(
+    { _id: req.params.id },
+    { $push: { comment: req.body } },
+    { new: true },
+    function(err, doc) {
+      if (err) console.log("ERROR!");
+      console.log("Document updated!", doc);
+    }
+  );
 });
 
 // Start the server
