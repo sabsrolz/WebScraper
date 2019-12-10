@@ -9,7 +9,7 @@ let axios = require("axios");
 let cheerio = require("cheerio");
 
 //require db models
-let db = require("./models");
+let db = require("./models/index");
 
 let PORT = 3000;
 
@@ -31,7 +31,7 @@ app.use(express.static("public"));
 //connect to Mongo DB
 
 let MONGODB_URI =
-  "mongodb://srolz1:Sabrina123@ds017248.mlab.com:17248/heroku_dpjcfv0b"; // || "mongodb://localhost:27017/webScraper";
+  process.env.MONGODB_URI || "mongodb://localhost:27017/webScraper";
 mongoose.connect(
   MONGODB_URI,
   {
