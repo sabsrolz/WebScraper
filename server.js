@@ -11,7 +11,7 @@ let cheerio = require("cheerio");
 //require db models
 let db = require("./models/model");
 
-let PORT = 3000;
+let PORT = process.env.PORT || 3000;
 
 //initialize Express
 let app = express();
@@ -31,7 +31,7 @@ app.use(express.static("public"));
 //connect to Mongo DB
 
 let MONGODB_URI =
-  "mongodb://srolz1:Sabrina123@ds017248.mlab.com:17248/heroku_dpjcfv0b";
+  process.env.MONGODB_URI || "mongodb://localhost:27017/webScraper";
 mongoose.connect(
   MONGODB_URI,
   {
