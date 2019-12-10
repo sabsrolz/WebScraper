@@ -20,7 +20,7 @@ let ArticleSchema = new Schema({
     required: true
   },
   comment: {
-    type: Schema.Types.Array,
+    type: Array,
     ref: "Comment"
   }
 

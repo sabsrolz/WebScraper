@@ -29,15 +29,25 @@ app.set("view engine", "handlebars");
 app.use(express.static("public"));
 
 //connect to Mongo DB
-//name of db is webScraper
+
 let MONGODB_URI =
-  process.env.MONGODB_URI || "mongodb://localhost:27017/webScraper";
-mongoose.connect(MONGODB_URI, {
-  useNewUrlParser: true
-});
-//console.log(process.env.MONGODB_URI);
+  "mongodb://srolz1:Sabrina123@ds017248.mlab.com:17248/heroku_dpjcfv0b"; // || "mongodb://localhost:27017/webScraper";
+mongoose.connect(
+  MONGODB_URI,
+  {
+    useNewUrlParser: true
+  },
+  function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Mongoose connection is ready");
+    }
+  }
+);
+console.log(process.env.MONGODB_URI);
 // mongoose.connect(
-//   "mongodb://sabsrolz@umich.edu:Coqui123@ds017248.mlab.com:17248/heroku_dpjcfv0b",
+//   "mongodb://srolz1:Sabrina123@ds017248.mlab.com:17248/heroku_dpjcfv0b",
 //   {
 //     useNewUrlParser: true
 //   }

@@ -31,6 +31,16 @@ $(document).on("click", "p", function() {
     method: "GET",
     url: "/articles/" + idSelected
   }).then(function(res) {
+    console.log(res);
+    res.comment.map(comment => {
+      if (comment.title) {
+        let titleTag = $(`<p>`);
+        titleTag.text(comment.title);
+        titleTag.appendTo("#comments-section");
+        // $("#comments-section").append(titleTag.text(comment.title));
+      }
+    });
+
     $("#comments-section").append(
       "<h5>" + "Article selected: " + res.title + "</h5>"
     );
