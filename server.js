@@ -9,7 +9,7 @@ let axios = require("axios");
 let cheerio = require("cheerio");
 
 //require db models
-let db = require("./models/index");
+let db = require("./models/model");
 
 let PORT = 3000;
 
