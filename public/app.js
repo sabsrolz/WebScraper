@@ -1,13 +1,13 @@
 //articles-section
 //comments-section
-
-$.getJSON("/articles", function(res) {
-  for (let art = 0; art < res.length; art++) {
-    $("#articles-section").append(
-      `<p class = "article-clicked" data-id = ${res[art]._id}>Title: ${res[art].title}</br><a href = ${res[art].link} target="_blank">Link: ${res[art].link}</a ><div class = "small">Summary: ${res[art].summary}</div></br></p>`
-    );
-  }
-});
+function delete_comment(id) {
+  $.ajax({
+    method: "DELETE",
+    url: "/articles/remove/" + id
+  }).then(function(res) {
+    console.log(res);
+  });
+}
 
 $("#refresh-scrape").on("click", function() {
   $.ajax({
@@ -32,10 +32,12 @@ $(document).on("click", "p", function() {
     url: "/articles/" + idSelected
   }).then(function(res) {
     console.log(res);
+    $("#comments-section").append("<h5>" + "Previous Comments" + "</h5>");
     res.comment.map(comment => {
       if (comment.title) {
         let titleTag = $(`<p>`);
         titleTag.text(comment.title);
+        titleTag.text(comment.body);
         titleTag.appendTo("#comments-section");
         // $("#comments-section").append(titleTag.text(comment.title));
       }

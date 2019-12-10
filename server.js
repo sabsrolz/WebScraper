@@ -183,6 +183,19 @@ app.post("/articles/:id", function(req, res) {
   );
 });
 
+app.delete("/articles/remove/:id", function(req, res) {
+  db.Comment.remove({ _id: req.params.id })
+    .then(function(deletion) {
+      console.log(deletion);
+    })
+    .catch(function(error) {
+      console.log("ERROR could not create document");
+      res.json(error);
+    });
+});
+
+//route to delete comments
+
 // Start the server
 app.listen(PORT, function() {
   console.log("App running on port " + PORT + "!");
